@@ -393,9 +393,14 @@
           <GroupName>Application/User/Core</GroupName>
           <Files>
             <File>
-              <FileName>slave.c</FileName>
+              <FileName>slavemodbus.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Core\Src\slave.c</FilePath>
+              <FilePath>..\Core\Src\slavemodbus.c</FilePath>
+            </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\crc.c</FilePath>
             </File>
             <File>
               <FileName>main.c</FileName>
