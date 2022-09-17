@@ -94,28 +94,9 @@ void servo_control(uint8_t motor_id, uint8_t motor_task, uint8_t motor_velocity)
 	modbus_tx[2] = 0x00;
 	modbus_tx[3] = servo_dir_reg_address;
 	
-	if(motor_id == servo_id_left) {
-		if(motor_task == servo_dir_forw || motor_task == servo_dir_right){
-			modbus_tx[4] = servo_dir_forw_data_MSB;
-			modbus_tx[5] = servo_dir_forw_data_LSB;
-			velocity = velocity;
-		} else {
-			modbus_tx[4] = servo_dir_rev_data_MSB;
-			modbus_tx[5] = servo_dir_rev_data_LSB;
-			velocity = velocity * -1;
-		}
-		
-	} else if(motor_id == servo_id_right) {
-		if(motor_task == servo_dir_forw || motor_task == servo_dir_left){
-			modbus_tx[4] = servo_dir_forw_data_MSB;
-			modbus_tx[5] = servo_dir_forw_data_LSB;
-			velocity = velocity;
-		} else {
-			modbus_tx[4] = servo_dir_rev_data_MSB;
-			modbus_tx[5] = servo_dir_rev_data_LSB;
-			velocity = velocity * -1;
-		}
-	}
+	if( (motor_task == servo_dir_back) || 
+	(motor_id == servo_id_left && motor_task == servo_dir_left) || 
+	(motor_id == servo_id_right && motor_task == servo_dir_right)	) velocity = velocity * -1;
 	
 	modbus_tx[4] = velocity >> 8;
 	modbus_tx[5] = velocity & 0xFF;
@@ -160,28 +141,9 @@ void servo_speed_change(uint8_t motor_id, uint8_t motor_task, uint8_t motor_velo
 	modbus_tx[2] = 0x00;
 	modbus_tx[3] = servo_dir_reg_address;
 	
-	if(motor_id == servo_id_left) {
-		if(motor_task == servo_dir_forw || motor_task == servo_dir_right){
-			//modbus_tx[4] = servo_dir_forw_data_MSB;
-			//modbus_tx[5] = servo_dir_forw_data_LSB;
-			velocity = velocity;
-		} else {
-			//modbus_tx[4] = servo_dir_rev_data_MSB;
-			//modbus_tx[5] = servo_dir_rev_data_LSB;
-			velocity = velocity * -1;
-		}
-		
-	} else if(motor_id == servo_id_right) {
-		if(motor_task == servo_dir_forw || motor_task == servo_dir_left){
-			modbus_tx[4] = servo_dir_forw_data_MSB;
-			modbus_tx[5] = servo_dir_forw_data_LSB;
-			velocity = velocity;
-		} else {
-			modbus_tx[4] = servo_dir_rev_data_MSB;
-			modbus_tx[5] = servo_dir_rev_data_LSB;
-			velocity = velocity * -1;
-		}
-	}
+	if( (motor_task == servo_dir_back) || 
+	(motor_id == servo_id_left && motor_task == servo_dir_left) || 
+	(motor_id == servo_id_right && motor_task == servo_dir_right)	) velocity = velocity * -1;
 	
 	modbus_tx[4] = velocity >> 8;
 	modbus_tx[5] = velocity & 0xFF;

@@ -97,74 +97,49 @@ void switch_control(){
 	agv_speed  = 10;
 	
 	if( HAL_GPIO_ReadPin(M_Sw_1_GPIO_Port,M_Sw_1_Pin) == GPIO_PIN_RESET || HAL_GPIO_ReadPin(Remote_Fr_GPIO_Port,Remote_Fr_Pin) == GPIO_PIN_RESET){
-		if(motor_status == servo_dir_stop){//(motor_status <= servo_dir_stop_p ){
-		//if(motor_status != servo_dir_forw) {
-			servo_control(servo_id_left,servo_dir_forw,1);
-			servo_control(servo_id_right,servo_dir_forw,1);
+		if(motor_status == servo_dir_stop){
+			servo_control(servo_id_left,servo_dir_forw,agv_start_speed);
+			servo_control(servo_id_right,servo_dir_forw,agv_start_speed);
 			motor_status = servo_dir_forw; 
-			motor_stop_del = 0; motor_extra_stop_del = 0;
-			agv_moving_speed = agv_speed; //agv_moving_speed_dynamic = 1;
+			motor_extra_stop_del = 0;
+			agv_moving_speed = agv_speed;
 			agv_moving_dir = AGV_dir_forward;
 		}
 	}
 	else if( HAL_GPIO_ReadPin(M_Sw_2_GPIO_Port,M_Sw_2_Pin) == GPIO_PIN_RESET || HAL_GPIO_ReadPin(Remote_Bk_GPIO_Port,Remote_Bk_Pin) == GPIO_PIN_RESET){
 		if(motor_status == servo_dir_stop){
-		//if(motor_status != servo_dir_back) {
-			servo_control(servo_id_left,servo_dir_back,1);
-			servo_control(servo_id_right,servo_dir_back,1);
+			servo_control(servo_id_left,servo_dir_back,agv_start_speed);
+			servo_control(servo_id_right,servo_dir_back,agv_start_speed);
 			motor_status = servo_dir_back; 
-			motor_stop_del = 0; motor_extra_stop_del = 0;
-			agv_moving_speed = agv_speed; //agv_moving_speed_dynamic = 1;
+			motor_extra_stop_del = 0;
+			agv_moving_speed = agv_speed;
 			agv_moving_dir = AGV_dir_back;
 		}
 	}
 	else if( HAL_GPIO_ReadPin(M_Sw_3_GPIO_Port,M_Sw_3_Pin) == GPIO_PIN_RESET || HAL_GPIO_ReadPin(Remote_Lf_GPIO_Port,Remote_Lf_Pin) == GPIO_PIN_RESET){
 		if(motor_status == servo_dir_stop){
-		//if(motor_status != servo_dir_left) {
-			servo_control(servo_id_left,servo_dir_left,1);
-			servo_control(servo_id_right,servo_dir_left,1);
+			servo_control(servo_id_left,servo_dir_left,agv_start_speed);
+			servo_control(servo_id_right,servo_dir_left,agv_start_speed);
 			motor_status = servo_dir_left; 
-			motor_stop_del = 0; motor_extra_stop_del = 0;
-			agv_moving_speed = agv_speed; //agv_moving_speed_dynamic = 1;
+			motor_extra_stop_del = 0;
+			agv_moving_speed = agv_speed; 
 			agv_moving_dir = AGV_dir_left;
 		}
 	}
 	else if( HAL_GPIO_ReadPin(M_Sw_4_GPIO_Port,M_Sw_4_Pin) == GPIO_PIN_RESET || HAL_GPIO_ReadPin(Remote_Rt_GPIO_Port,Remote_Rt_Pin) == GPIO_PIN_RESET){
 		if(motor_status == servo_dir_stop){
-		//if(motor_status != servo_dir_right) {
-			servo_control(servo_id_left,servo_dir_right,1);
-			servo_control(servo_id_right,servo_dir_right,1);
+			servo_control(servo_id_left,servo_dir_right,agv_start_speed);
+			servo_control(servo_id_right,servo_dir_right,agv_start_speed);
 			motor_status = servo_dir_right; 
-			motor_stop_del = 0; motor_extra_stop_del = 0;
-			agv_moving_speed = agv_speed; //agv_moving_speed_dynamic = 1;
+			motor_extra_stop_del = 0;
+			agv_moving_speed = agv_speed; 
 			agv_moving_dir = AGV_dir_right;
 		}
 	}
 	else if(motor_status > servo_dir_stop_p){
-		//servo_control(servo_id_left ,servo_dir_stop,0);
-		//servo_control(servo_id_right ,servo_dir_stop,0);
-		//motor_status 		= servo_dir_stop_p;
-		motor_stop_del 	= agv_full_speed;
-		agv_moving_speed = 0;   //agv_moving_speed_dynamic = 0;
-		//agv_moving_dir = AGV_dir_stop;
-	
+		agv_moving_speed = agv_stop_speed;
 	}
-	
-//	if(motor_stop_del){
-//		motor_stop_del--;
-//		if(motor_stop_del == 0){
-//			servo_control(servo_id_left ,servo_dir_stop,0);
-//			servo_control(servo_id_right ,servo_dir_stop,0);
-//			motor_status = servo_dir_stop;
-//			agv_moving_speed_dynamic = 0;
-//			agv_moving_dir = AGV_dir_stop;
-//		} else {
-//			servo_speed_change(servo_id_left,agv_moving_dir,motor_stop_del);
-//			servo_speed_change(servo_id_right,agv_moving_dir,motor_stop_del);	
-//		}
-//		
-//	}
-	
+
 	busy_check(busy_reset);
 }
 
