@@ -50,34 +50,6 @@ void schedule(){
 		//rgb_blink_flag = rgb_blink_flag;
 	}
 	
-//	if(agv_moving_speed_dynamic > 0 && agv_moving_speed_dynamic < agv_full_speed ){
-//		
-//		servo_speed_change(servo_id_left,motor_status,agv_moving_speed_dynamic);
-//		servo_speed_change(servo_id_right,motor_status,agv_moving_speed_dynamic);	
-//		agv_moving_speed_dynamic++;
-//	}	else if(motor_stop_del){
-//		motor_stop_del--;
-//		if(motor_stop_del == 0){
-//			servo_control(servo_id_left ,servo_dir_stop,0);
-//			servo_control(servo_id_right ,servo_dir_stop,0);
-//			motor_status = servo_dir_stop;
-//			agv_moving_speed_dynamic = 0;
-//			agv_moving_dir = AGV_dir_stop;
-//			motor_extra_stop_del = agv_full_speed;
-//		} else {
-//			servo_speed_change(servo_id_left,agv_moving_dir,motor_stop_del);
-//			servo_speed_change(servo_id_right,agv_moving_dir,motor_stop_del);	
-//		}
-//	} 
-//	
-//	else if(motor_extra_stop_del){
-//		motor_extra_stop_del--;
-//		if(motor_extra_stop_del == 0){
-//			servo_control(servo_id_left ,servo_dir_stop,0);
-//			servo_control(servo_id_right ,servo_dir_stop,0);
-//		}
-//	}
-
 	if(agv_moving_speed != agv_moving_speed_dynamic){
 		if(agv_moving_speed > agv_moving_speed_dynamic){
 			agv_moving_speed_dynamic++;
@@ -87,9 +59,9 @@ void schedule(){
 		servo_speed_change(servo_id_left, motor_status,agv_moving_speed_dynamic);
 		servo_speed_change(servo_id_right,motor_status,agv_moving_speed_dynamic);
 		
-		if(agv_moving_speed == 0 && agv_moving_speed_dynamic == 0){
-			servo_control(servo_id_left ,servo_dir_stop,0);
-			servo_control(servo_id_right ,servo_dir_stop,0);
+		if(agv_moving_speed == agv_stop_speed && agv_moving_speed_dynamic == agv_stop_speed){
+			servo_control(servo_id_left ,servo_dir_stop,agv_stop_speed);
+			servo_control(servo_id_right ,servo_dir_stop,agv_stop_speed);
 			motor_status = servo_dir_stop;
 			agv_moving_dir = AGV_dir_stop;
 			motor_extra_stop_del = agv_full_speed;
@@ -97,9 +69,9 @@ void schedule(){
 	}
 	else if(motor_extra_stop_del){
 		motor_extra_stop_del--;
-		if(motor_extra_stop_del == 0){
-			servo_control(servo_id_left ,servo_dir_stop,0);
-			servo_control(servo_id_right ,servo_dir_stop,0);
+		if(motor_extra_stop_del == agv_stop_speed){
+			servo_control(servo_id_left ,servo_dir_stop,agv_stop_speed);
+			servo_control(servo_id_right ,servo_dir_stop,agv_stop_speed);
 		}
 	}
 	
@@ -109,20 +81,11 @@ void schedule(){
 		rgb_check();
 	
 	if(ms == 2){
-		//servo_control(servo_id_left ,servo_dir_back);
-		//while(servo_dma_busy_flag)	HAL_Delay(1);
-			//HAL_GPIO_TogglePin(Busy_GPIO_Port,Busy_Pin);
-		
-		//servo_control(servo_id_right,servo_dir_forw);
-		
-		// HAL_Delay(10);
+
 		
 	}
 	/* To update RGB Status */
 	//if(ms == 1) 
-	
-	
-	
 	
 	//busy_check(busy_reset);
 }
