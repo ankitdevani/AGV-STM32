@@ -19,6 +19,9 @@ uint8_t agv_moving_speed_dynamic	= 0;
 uint8_t	agv_speed									= agv_full_speed;
 uint8_t agv_remote_dir						= AGV_dir_stop;
 
+uint8_t agv_left_moving_speed  = 0, agv_left_moving_speed_dynamic  = 0;
+uint8_t agv_right_moving_speed = 0, agv_right_moving_speed_dynamic = 0;
+
 void agv_clk_start(){
 	HAL_TIM_Base_Start_IT(&htim6);
 }
@@ -50,24 +53,36 @@ void schedule(){
 		//rgb_blink_flag = rgb_blink_flag;
 	}
 	
-	if(agv_moving_speed != agv_moving_speed_dynamic){
-		if(agv_moving_speed > agv_moving_speed_dynamic){
-			agv_moving_speed_dynamic++;
-		} if(agv_moving_speed < agv_moving_speed_dynamic){
-			agv_moving_speed_dynamic--;
+	if(agv_left_moving_speed != agv_left_moving_speed_dynamic){
+		if(agv_left_moving_speed > agv_left_moving_speed_dynamic){
+			agv_left_moving_speed_dynamic++;
+		} if(agv_left_moving_speed < agv_left_moving_speed_dynamic){
+			agv_left_moving_speed_dynamic--;
 		}
-		servo_speed_change(servo_id_left, motor_status,agv_moving_speed_dynamic);
-		servo_speed_change(servo_id_right,motor_status,agv_moving_speed_dynamic);
-		
-		if(agv_moving_speed == agv_stop_speed && agv_moving_speed_dynamic == agv_stop_speed){
+		servo_speed_change(servo_id_left, motor_status,agv_left_moving_speed_dynamic);
+		if(agv_left_moving_speed == agv_stop_speed && agv_left_moving_speed_dynamic == agv_stop_speed){
 			servo_control(servo_id_left ,servo_dir_stop,agv_stop_speed);
+			motor_status = servo_dir_stop;
+			agv_moving_dir = AGV_dir_stop;
+			motor_extra_stop_del = agv_full_speed;
+		}
+	}
+	if(agv_right_moving_speed != agv_right_moving_speed_dynamic){
+		if(agv_right_moving_speed > agv_right_moving_speed_dynamic){
+			agv_right_moving_speed_dynamic++;
+		} if(agv_right_moving_speed < agv_right_moving_speed_dynamic){
+			agv_right_moving_speed_dynamic--;
+		}
+		servo_speed_change(servo_id_right, motor_status,agv_right_moving_speed_dynamic);
+		if(agv_right_moving_speed == agv_stop_speed && agv_right_moving_speed_dynamic == agv_stop_speed){
 			servo_control(servo_id_right ,servo_dir_stop,agv_stop_speed);
 			motor_status = servo_dir_stop;
 			agv_moving_dir = AGV_dir_stop;
 			motor_extra_stop_del = agv_full_speed;
 		}
 	}
-	else if(motor_extra_stop_del){
+	
+	if(motor_extra_stop_del){
 		motor_extra_stop_del--;
 		if(motor_extra_stop_del == agv_stop_speed){
 			servo_control(servo_id_left ,servo_dir_stop,agv_stop_speed);
@@ -102,7 +117,7 @@ void switch_control(){
 			servo_control(servo_id_right,servo_dir_forw,agv_start_speed);
 			motor_status = servo_dir_forw; 
 			motor_extra_stop_del = 0;
-			agv_moving_speed = agv_speed;
+			agv_moving_speed = agv_speed; agv_left_moving_speed  = agv_speed; agv_right_moving_speed  = agv_speed; 
 			agv_moving_dir = AGV_dir_forward;
 		}
 	}
@@ -112,7 +127,7 @@ void switch_control(){
 			servo_control(servo_id_right,servo_dir_back,agv_start_speed);
 			motor_status = servo_dir_back; 
 			motor_extra_stop_del = 0;
-			agv_moving_speed = agv_speed;
+			agv_moving_speed = agv_speed; agv_left_moving_speed  = agv_speed; agv_right_moving_speed  = agv_speed; 
 			agv_moving_dir = AGV_dir_back;
 		}
 	}
@@ -122,7 +137,7 @@ void switch_control(){
 			servo_control(servo_id_right,servo_dir_left,agv_start_speed);
 			motor_status = servo_dir_left; 
 			motor_extra_stop_del = 0;
-			agv_moving_speed = agv_speed; 
+			agv_moving_speed = agv_speed; agv_left_moving_speed  = agv_half_speed; agv_right_moving_speed  = agv_half_speed; 
 			agv_moving_dir = AGV_dir_left;
 		}
 	}
@@ -132,12 +147,12 @@ void switch_control(){
 			servo_control(servo_id_right,servo_dir_right,agv_start_speed);
 			motor_status = servo_dir_right; 
 			motor_extra_stop_del = 0;
-			agv_moving_speed = agv_speed; 
+			agv_moving_speed = agv_speed; agv_left_moving_speed  = agv_half_speed; agv_right_moving_speed  = agv_half_speed;  
 			agv_moving_dir = AGV_dir_right;
 		}
 	}
 	else if(motor_status > servo_dir_stop_p){
-		agv_moving_speed = agv_stop_speed;
+		agv_moving_speed = agv_stop_speed; agv_left_moving_speed  = agv_stop_speed; agv_right_moving_speed  = agv_stop_speed; 
 	}
 
 	busy_check(busy_reset);
