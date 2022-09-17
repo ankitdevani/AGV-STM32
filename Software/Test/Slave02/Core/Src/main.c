@@ -128,10 +128,10 @@ int main(void)
   id_detect();                   // Slave ID Detection
 
 	HAL_UARTEx_ReceiveToIdle_DMA(&huart1,RxSensorBuf,RxSensorBuf_SIZE);
-	__HAL_DMA_DISABLE_IT(&hdma_usart1_rx,DMA_IT_HT);
+	//__HAL_DMA_DISABLE_IT(&hdma_usart1_rx,DMA_IT_HT);
 
 	HAL_UARTEx_ReceiveToIdle_DMA(&huart2,RxBuf,RxBuf_SIZE);
-	__HAL_DMA_DISABLE_IT(&hdma_usart2_rx,DMA_IT_HT);
+	//__HAL_DMA_DISABLE_IT(&hdma_usart2_rx,DMA_IT_HT);
 
   /* USER CODE END 2 */
 
